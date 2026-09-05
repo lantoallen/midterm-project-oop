@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Scanner;
 
 // Runs the menu and reads/validates all user input, then calls
 // InventoryManager to actually do the work.
@@ -125,15 +125,21 @@ public class Main {
         return text.length() >= 2 && text.charAt(0) == '0' && Character.isDigit(text.charAt(1));
     }
 
+    // If there's no more input coming (e.g. the input stream was closed),
+    // exit cleanly instead of letting the program crash.
+    private static void exitIfNoMoreInput() {
+        if (!sc.hasNextLine()) {
+            System.out.println("\nThank you for using the Inventory Management System. Goodbye!");
+            System.exit(0);
+        }
+    }
+
     private static int readMenuChoice() {
         boolean isChoiceValid = false;
         int choice = -1;
 
         while (!isChoiceValid) {
-            if (!sc.hasNextLine()) {
-                System.out.println("\nThank you for using the Inventory Management System. Goodbye!!");
-                System.exit(0);
-            }
+            exitIfNoMoreInput();
 
             String input = sc.nextLine().trim();
             boolean isSingleDigit = input.length() == 1 && Character.isDigit(input.charAt(0));
@@ -154,10 +160,7 @@ public class Main {
 
         while (!isTextValid) {
             System.out.print(prompt);
-            if (!sc.hasNextLine()) {
-                System.out.println("\nThank you for using the Inventory Management System. Goodbye!!");
-                System.exit(0);
-            }
+            exitIfNoMoreInput();
 
             input = sc.nextLine().trim();
             if (input.isEmpty()) {
@@ -175,10 +178,7 @@ public class Main {
 
         while (!isIntValid) {
             System.out.print(prompt);
-            if (!sc.hasNextLine()) {
-                System.out.println("\nThank you for using the Inventory Management System. Goodbye!!");
-                System.exit(0);
-            }
+            exitIfNoMoreInput();
 
             String input = sc.nextLine().trim();
 
@@ -204,10 +204,7 @@ public class Main {
 
         while (!isDoubleValid) {
             System.out.print(prompt);
-            if (!sc.hasNextLine()) {
-                System.out.println("\nThank you for using the Inventory Management System. Goodbye!!");
-                System.exit(0);
-            }
+            exitIfNoMoreInput();
 
             String input = sc.nextLine().trim();
 
@@ -348,7 +345,13 @@ public class Main {
             String input = sc.nextLine().trim();
             if (input.equalsIgnoreCase("quantity") || input.equalsIgnoreCase("price")
                     || input.equals("1") || input.equals("2")) {
-                sortBy = input.equals("1") ? "quantity" : input.equals("2") ? "price" : input;
+                if (input.equals("1")) {
+                    sortBy = "quantity";
+                } else if (input.equals("2")) {
+                    sortBy = "price";
+                } else {
+                    sortBy = input;
+                }
                 isSortFieldValid = true;
             } else {
                 System.out.println("Invalid input. Please enter 'Quantity' or 'Price'.");
