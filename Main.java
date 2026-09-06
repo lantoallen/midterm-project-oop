@@ -215,7 +215,11 @@ public class Main {
             } else {
                 try {
                     value = Double.parseDouble(input);
-                    isDoubleValid = true;
+                    if (Double.isInfinite(value)) {
+                        System.out.println("Number is too large. Please enter a valid price.");
+                    } else {
+                        isDoubleValid = true;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Number is too large. Please enter a valid price.");
                 }
