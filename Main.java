@@ -189,7 +189,11 @@ public class Main {
             } else {
                 try {
                     value = Integer.parseInt(input);
-                    isIntValid = true;
+                    if (value > Item.MAX_QUANTITY) {
+                        System.out.println("Quantity cannot exceed " + Item.MAX_QUANTITY + ".");
+                    } else {
+                        isIntValid = true;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Number is too large. Please enter a smaller whole number.");
                 }
@@ -217,6 +221,8 @@ public class Main {
                     value = Double.parseDouble(input);
                     if (Double.isInfinite(value)) {
                         System.out.println("Number is too large. Please enter a valid price.");
+                    } else if (value > Item.MAX_PRICE) {
+                        System.out.printf("Price cannot exceed ₱%.2f.%n", Item.MAX_PRICE);
                     } else {
                         isDoubleValid = true;
                     }
@@ -278,6 +284,7 @@ public class Main {
         boolean isOptionValid = false;
         while (!isOptionValid) {
             System.out.print("Update (1) Quantity or (2) Price? Enter 1 or 2: ");
+            exitIfNoMoreInput();
             option = sc.nextLine().trim();
             if (option.equals("1") || option.equalsIgnoreCase("quantity")
                     || option.equals("2") || option.equalsIgnoreCase("price")) {
@@ -297,7 +304,7 @@ public class Main {
             double newPrice = readNonNegativeDouble("Enter new Price: ");
             double oldPrice = item.getPrice();
             manager.updatePrice(id, newPrice);
-            System.out.printf("Price of Item %s is updated from %.2f to %.2f%n",
+                System.out.printf("Price of Item %s is updated from ₱%.2f to ₱%.2f%n",
                     item.getName(), oldPrice, newPrice);
         }
     }
@@ -332,7 +339,7 @@ public class Main {
         System.out.println("ID: " + item.getId());
         System.out.println("Name: " + item.getName());
         System.out.println("Quantity: " + item.getQuantity());
-        System.out.printf("Price: %.2f%n", item.getPrice());
+        System.out.printf("Price: ₱%.2f%n", item.getPrice());
         System.out.println("Category: " + item.getCategory());
     }
 
@@ -346,6 +353,7 @@ public class Main {
         boolean isSortFieldValid = false;
         while (!isSortFieldValid) {
             System.out.print("Sort by (Quantity/Price): ");
+            exitIfNoMoreInput();
             String input = sc.nextLine().trim();
             if (input.equalsIgnoreCase("quantity") || input.equalsIgnoreCase("price")
                     || input.equals("1") || input.equals("2")) {
@@ -366,6 +374,7 @@ public class Main {
         boolean isAscending = true;
         while (!isOrderValid) {
             System.out.print("Order (Ascending/Descending): ");
+            exitIfNoMoreInput();
             String input = sc.nextLine().trim();
             if (input.equalsIgnoreCase("ascending") || input.equalsIgnoreCase("asc")) {
                 isAscending = true;

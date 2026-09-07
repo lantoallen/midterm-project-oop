@@ -2,6 +2,9 @@
 // be changed through the setters below, which also check the values are valid.
 public abstract class Item {
 
+    public static final int MAX_QUANTITY = 100_000;
+    public static final double MAX_PRICE = 1_000_000.00;
+
     private String id;
     private String name;
     private int quantity;
@@ -45,6 +48,9 @@ public abstract class Item {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity cannot be negative.");
         }
+        if (quantity > MAX_QUANTITY) {
+            throw new IllegalArgumentException("Quantity cannot exceed " + MAX_QUANTITY + ".");
+        }
         this.quantity = quantity;
     }
 
@@ -56,6 +62,9 @@ public abstract class Item {
         if (price < 0.0) {
             throw new IllegalArgumentException("Price cannot be negative.");
         }
+        if (price > MAX_PRICE) {
+            throw new IllegalArgumentException("Price cannot exceed " + String.format("₱%.2f", MAX_PRICE) + ".");
+        }
         this.price = price;
     }
 
@@ -64,13 +73,13 @@ public abstract class Item {
 
     // One row for the "Display All" / sort / low stock tables: ID, Name, Quantity, Price, Category.
     public String toTableRow() {
-        return String.format("%-10s %-20s %-10d %-12.2f %-15s",
-                id, name, quantity, price, getCategory());
+        return String.format("%-10s %-20s %-10d %-12s %-15s",
+            id, name, quantity, String.format("₱%.2f", price), getCategory());
     }
 
     // Same as above but without the Category column, for the "by category" table.
     public String toCategoryRow() {
-        return String.format("%-10s %-20s %-10d %-12.2f",
-                id, name, quantity, price);
+        return String.format("%-10s %-20s %-10d %-12s",
+            id, name, quantity, String.format("₱%.2f", price));
     }
 }
